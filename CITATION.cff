@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this repository or its findings, please cite it as below."
+title: "Allostatic Sprint Hypothesis: Exploring Impulsivity Heterogeneity in ADHD"
+authors:
+  - name: "D1D2DOPAMINE"
+    # add an ORCID here later if you ever create one anonymously (orcid.org allows pseudonymous profiles is NOT true --
+    # ORCID requires a real identity, so skip this unless you're ready to attach your name)
+date-released: 2026-07-10
+url: "https://github.com/REPLACE_WITH_USERNAME/REPLACE_WITH_REPO_NAME"
+repository-code: "https://github.com/REPLACE_WITH_USERNAME/REPLACE_WITH_REPO_NAME"
+license: MIT
+keywords:
+  - ADHD
+  - impulsivity
+  - continuous performance test
+  - computational psychiatry
+  - open data
+abstract: >
+  An independent, exploratory re-analysis of two open ADHD datasets (HYPERAKTIV, BALLADEER)
+  testing a hypothesized behavioral subtype structure. Finds replicated evidence for
+  impulsivity heterogeneity in ADHD relative to neurotypical controls; does not find
+  support for a hypothesized temporal (within-task) divergence between subtypes.
+  Not peer-reviewed.
