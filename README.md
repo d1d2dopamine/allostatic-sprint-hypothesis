@@ -11,91 +11,205 @@
 <p align="center">
   <img src="https://img.shields.io/badge/BALLADEER%20impulsivity-p%3D0.011%20✓-brightgreen" alt="balladeer significant">
   <img src="https://img.shields.io/badge/HYPERAKTIV%20trend-p%3D0.031%2C%20ns-yellow" alt="hyperaktiv trend">
+  <img src="https://img.shields.io/badge/UCLA%20CNP-group%20differences%20ns-lightgrey" alt="UCLA CNP group differences not significant">
+  <img src="https://img.shields.io/badge/discrete%20subtypes-not%20supported-red" alt="discrete subtypes not supported">
   <img src="https://img.shields.io/badge/temporal%20dynamics-not%20supported-red" alt="temporal dynamics not supported">
+  <img src="https://img.shields.io/badge/dimensional%20model-exploratory-orange" alt="dimensional model exploratory">
   <img src="https://img.shields.io/badge/mechanism-untested-lightgrey" alt="mechanism untested">
 </p>
 
-**Not a diagnostic or clinical tool.** Findings are preliminary and independently produced — see limitations below before citing anything here.
+**Not a diagnostic or clinical tool.** Findings are preliminary, independently produced, and not peer reviewed. The project reports positive, null, and methodologically inconclusive results together; read the limitations before citing or reusing any claim.
 
 ## Overview
 
-This project explores whether ADHD is behaviorally heterogeneous with respect to impulsivity on continuous-performance / go-no-go style attention tasks, using two independent, publicly available datasets. It originated from an informal hypothesis ("Allostatic Sprint") proposing two behavioral subtypes of ADHD decompensation. Some parts of that hypothesis held up under testing; others did not. Both are reported here — the scorecard above is the honest summary, everything below is the full detail behind it.
+This project investigates whether ADHD-related performance on sustained-attention and response-inhibition tasks is behaviorally heterogeneous. It began with an informal **"Allostatic Sprint"** hypothesis proposing two contrasting patterns of decompensation: a relatively fast but disinhibited **Sprint-like** pattern and a slower, more variable **Crash-like** pattern.
 
-**A note on what "subtype" means here:** the analysis below tests a *static* version of the hypothesis — that ADHD participants sort into stable, cross-sectional subgroups based on a single test session. The original informal hypothesis is actually *cyclical*, not static: the proposal is that the same individual moves over time between an "Allostatic Sprint" phase (high dopamine/ATP availability, high performance) and an "Allostatic Crash" phase (low dopamine/ATP, self-protective procrastination), with transitions on a timescale of weeks to months — not that people are permanently sorted into one type or the other. Both datasets used here (BALLADEER, HYPERAKTIV) capture only a single snapshot per participant, so they can test whether cross-sectional heterogeneity exists (it does — see below), but they cannot test the cyclical phase-transition version of the hypothesis, which would require repeated longitudinal measurement of the same individuals over time. See "Untested" below for detail.
+Three independent public datasets have now been examined:
 
-## What Was Tested, and What the Data Actually Showed
+1. **HYPERAKTIV** — clinical CPT-II data, used for initial exploration.
+2. **BALLADEER** — a CPT/go-no-go-like attention task with diagnostically clean neurotypical controls.
+3. **UCLA CNP / OpenNeuro ds000030** — an adult Stop-Signal Task dataset used as a third, cluster-free conceptual test.
 
-**Supported:**
-- ADHD samples show real heterogeneity in impulsivity (commission-error rate) relative to genuine neurotypical controls. A subgroup of ADHD participants ("Decompensated Sprint" cluster) shows significantly higher commission rates than clean, non-ADHD controls.
-  - BALLADEER dataset, diagnostically clean subsample (confirmed ADHD vs. confirmed non-ADHD, ambiguous/"suspected" cases excluded): Mann-Whitney U, n = 20 vs 20, p = 0.011 (survives Bonferroni correction across 3 clusters, α = 0.0167), rank-biserial r ≈ -0.465. Confirmed by a label-permutation test (empirical p = 0.014).
-  - The same direction of effect appears in the HYPERAKTIV dataset (Mann-Whitney U, p = 0.031, r = -0.462; permutation-test empirical p = 0.042), but does **not** clear the same Bonferroni-corrected threshold there, and the comparison group in HYPERAKTIV is *clinical* controls (participants with other psychiatric diagnoses), not confirmed-healthy individuals — a weaker comparison. Treat this as a consistent trend, not as a second independently significant confirmation. (An earlier, uncorrected version of this analysis reported p = 0.0004 on HYPERAKTIV; that number came from a flawed pipeline — see `docs/analysis_log.md` — and should be disregarded in favor of the corrected p = 0.031 above.)
-- This heterogeneity itself is consistent with the broader published ADHD literature on reaction-time variability and commission-error heterogeneity (e.g., Kofler et al., 2013 meta-analysis) — this project largely **replicates**, rather than newly discovers, that pattern.
+The evidence is mixed. BALLADEER contains a corrected, permutation-confirmed commission-error effect within one analysis-defined cluster. HYPERAKTIV shows a directionally similar but correction-nonsignificant trend. UCLA CNP shows no significant ADHD-control differences in go reaction time, reaction-time variability, omission rate, or stop-signal reaction time (SSRT), no significant increase in ADHD variance, and no acceptable two-cluster solution.
+
+Accordingly, the current evidence does **not** establish two discrete, task-general ADHD subtypes. A more cautious possibility is a **continuous and context-dependent behavioral space**—for example, speed, variability, caution, and inhibitory control as partially independent dimensions—rather than permanent categories. This dimensional interpretation is a reformulation motivated by the accumulated results, not a confirmed finding.
+
+## Current Evidence at a Glance
+
+| Dataset | Comparison | Sample used in key test | Result | Interpretation |
+|---|---|---:|---|---|
+| BALLADEER | Pure ADHD vs pure control within the Decompensated Sprint cluster | 20 vs 20 | Mann–Whitney p = 0.011; permutation p = 0.014 | Significant task-specific commission-error effect; partially circular because accuracy contributed to cluster definition |
+| HYPERAKTIV | ADHD vs clinical controls within the analogous cluster | 24 vs 11 | p = 0.031; permutation p = 0.042; Bonferroni α = 0.0167 | Directionally consistent trend, but not an independent corrected confirmation |
+| UCLA CNP | All eligible ADHD vs healthy controls, cluster-free | 41 vs 126 | All primary group tests nonsignificant; all variance tests nonsignificant | No replication of a broad, task-general ADHD difference on Stop-Signal measures |
+| UCLA CNP clustering | ADHD-only GMM using median go RT and go RT MAD | 41 ADHD | K = 2 isolated one participant (2.4%); minimum required share = 15% | Outlier-like component, not accepted as a discrete subtype |
+
+## What the Data Show
+
+### Supported within a specific task and analysis
+
+- In the diagnostically clean BALLADEER subsample, the analysis-defined **Decompensated Sprint** cluster showed higher commission-error rates in ADHD than in confirmed non-ADHD controls: Mann–Whitney U, n = 20 vs 20, p = 0.011, surviving Bonferroni correction across three clusters (α = 0.0167), with rank-biserial r ≈ -0.465. A label-permutation test gave empirical p = 0.014.
+- HYPERAKTIV showed the same direction of effect (p = 0.031, r = -0.462; empirical permutation p = 0.042), but the result did **not** cross the Bonferroni-corrected threshold. Its comparison group consists of participants with other psychiatric diagnoses, not confirmed-healthy controls. It is therefore reported as a trend, not a second significant replication.
+- These task-specific observations are compatible with published ADHD literature describing reaction-time and commission-error heterogeneity. They do not, by themselves, establish new biological subtypes.
 
 <table>
 <tr>
-<td width="50%"><img src="balladeer_impulsivity_by_subtype.png" alt="Impulsivity by subtype, BALLADEER dataset" width="100%"></td>
-<td width="50%"><img src="balladeer_accuracy_by_subtype.png" alt="Accuracy by subtype, BALLADEER dataset" width="100%"></td>
+<td width="50%"><img src="balladeer_impulsivity_by_subtype.png" alt="BALLADEER commission-error rate by analysis-defined subtype" width="100%"></td>
+<td width="50%"><img src="balladeer_accuracy_by_subtype.png" alt="BALLADEER accuracy by analysis-defined subtype" width="100%"></td>
 </tr>
 </table>
-<p align="center"><sub>Descriptive plots of the clustering used. Not evidence of separate neural mechanisms — mechanism was never measured (see below).</sub></p>
+<p align="center"><sub>BALLADEER descriptive plots. The clusters are analysis-defined and partly use accuracy; these figures are not evidence of separate neural or metabolic mechanisms.</sub></p>
 
-**Not supported:**
-- The hypothesis that the two proposed subtypes ("Decompensated Sprint" vs. "Compensated Crash") follow different trajectories *within a single test session* (minutes-long blocks) was tested with a mixed-effects model (`commission ~ block × cluster`, Pure-ADHD only) and came back flat (p = 0.847). The two clusters differ in baseline impulsivity, not in how that impulsivity changes across the task. This specific test was likely underpowered (only 4 of 20 "Sprint" participants had complete 4-block data), so it should be read as inconclusive rather than a clean disproof — but it does **not** support the original claim.
+### Not supported or not generalized
 
-  **Note on scope:** this test only covers within-session dynamics (minutes). It does **not** test the longer-timescale cyclical hypothesis described below (phase transitions over weeks/months) — that would require longitudinal data this project does not have. A flat result at the minutes timescale says nothing about whether phase cycling exists at the weeks-to-months timescale; the two should not be conflated.
-- No physiological signature distinguishing the two subtypes was found in the available data (see PRV note below).
+- **UCLA CNP cluster-free analysis:** ADHD and healthy-control participants did not differ significantly in median go RT (p = 0.282), go RT MAD (p = 0.728), go RT IQR (p = 0.802), go omission rate (p = 0.325), or SSRT (p = 0.709). Median SSRT was 206 ms in ADHD and 217 ms in controls; group means were nearly identical (224 vs 223 ms).
+- **UCLA CNP variance tests:** Brown–Forsythe tests found no significant evidence of greater ADHD dispersion in median go RT (p = 0.766), go RT MAD (p = 0.399), go RT IQR (p = 0.480), or SSRT (p = 0.204).
+- **UCLA CNP discrete clustering:** a two-component Gaussian mixture improved BIC and produced high silhouette separation, but the smaller component contained only one of 41 ADHD participants (2.4%). Because it failed the prespecified minimum-size criterion of 15%, it was treated as an outlier-like component rather than a subtype. No Sprint/Crash labels were assigned.
+- **BALLADEER within-session trajectories:** the hypothesized difference in minute-scale commission-error trajectories between Sprint and Crash clusters was not supported (`commission ~ block × cluster`, Pure ADHD only, interaction p = 0.847). This test was underpowered because only 4 of 20 Sprint participants had complete four-block data.
+- No clear physiological signature separating the BALLADEER clusters was found in available skin-conductance data.
+
+<table>
+<tr>
+<td width="58%"><img src="ucla_cnp_group_distributions.png" alt="UCLA CNP cluster-free distributions of median go RT, go RT MAD, and SSRT" width="100%"></td>
+<td width="42%"><img src="ucla_cnp_temporal_dynamics.png" alt="UCLA CNP descriptive within-session reaction-time dynamics" width="100%"></td>
+</tr>
+</table>
+<p align="center"><sub>UCLA CNP conceptual replication. Left: ADHD-control distributions were highly overlapping and all primary tests were nonsignificant. Right: both groups slowed descriptively across four task blocks; no longitudinal phase claim can be inferred from a single session.</sub></p>
 
 <p align="center">
-  <img src="balladeer_eda_change_by_cohort.png" width="520" alt="Skin conductance change by cohort and subtype">
+  <img src="balladeer_eda_change_by_cohort.png" width="560" alt="BALLADEER skin-conductance change by cohort and subtype">
 </p>
-<p align="center"><sub>The physiological angle that didn't pan out: no clear pattern separating subtypes in skin-conductance change. Posted here rather than quietly dropped.</sub></p>
+<p align="center"><sub>No clear BALLADEER skin-conductance pattern separated the proposed clusters. This negative result is retained rather than omitted.</sub></p>
 
-**Untested (not measured, not claimed as fact):**
-- Any dopaminergic (D1/D2 receptor) or ATP-depletion mechanism. This was always a narrative/motivating metaphor for the behavioral pattern, never something this project measured. No receptor imaging, pharmacology, or direct physiological validation of this mechanism exists here or is claimed.
-- PRV (pulse-rate variability), originally intended as the key physiological marker for the "Compensated Crash" subtype, is missing (NaN) across all participants and sources in this BALLADEER export. This is a data-availability gap, not a negative finding — the physiological hypothesis remains untested rather than disproven.
-- **Cyclical phase-transition dynamics.** The original hypothesis behind this project proposes that individuals cycle between an "Allostatic Sprint" phase and an "Allostatic Crash" phase over time, rather than being permanently sorted into one static subtype. Based on the author's personal, single-case (n=1) observation, sprint phases last roughly 1 week to 2 months, crash phases roughly 1–4 weeks, with transitions occurring over 2–3 days. **This is an individual's self-reported introspective observation, not a data-derived finding, and has not been tested in any dataset here.** Testing it would require longitudinal / repeated-measures data (e.g. ecological momentary assessment or daily self-tracking over several months) on the same individuals — a fundamentally different study design from the cross-sectional datasets used in this project.
+## From Discrete Subtypes to a Dimensional Interpretation
 
-## Methodology (brief)
+The original cross-sectional implementation asked whether participants could be sorted into stable Sprint and Crash categories. The accumulated evidence does not support that strong categorical claim across tasks.
 
-1. Cluster "anchors" (Work Speed Mean, Work Speed SD, Accuracy %) are derived empirically from each dataset rather than fixed in advance.
-2. Participants are assigned to the nearest anchor by z-scaled Euclidean distance.
-3. Group differences within each cluster are tested with Mann-Whitney U, Bonferroni-corrected across clusters, and cross-checked with a label-permutation test.
+A weaker, dimensional formulation is now more plausible:
 
-**Known methodological caveat (circularity):** because Accuracy/commission rate is one of the three axes used to *define* the clusters, the "Decompensated Sprint" cluster is partly, though not entirely, defined by low accuracy — so finding an accuracy/commission difference in that cluster is a partially expected consequence of the clustering method itself, not purely an independent discovery. A cluster-free confirmation (e.g., a mixed model on the full sample without pre-assigned clusters) is a planned follow-up.
+- **Speed:** faster ↔ slower responding.
+- **Temporal stability:** consistent ↔ variable responding.
+- **Response policy:** disinhibited ↔ cautious responding.
+- **Inhibitory control:** shorter ↔ longer stopping latency.
+- **State dependence:** position on these dimensions may vary with fatigue, motivation, medication, sleep, stress, and task demands.
 
-## Datasets & Attribution
+Under this interpretation, Sprint-like and Crash-like patterns are descriptive poles, not diagnoses or immutable kinds of people. Most participants may occupy intermediate positions, and different tasks may reveal different projections of the same multidimensional behavioral space.
 
-- **HYPERAKTIV** — Hicks et al. Used for initial exploration. Control group in this dataset consists of *clinical* controls (other psychiatric diagnoses), not healthy individuals — please label it accordingly if reusing. Check current license terms before redistribution.
-- **BALLADEER** — Trujillo, Ferrer-Cascales, Teruel et al., *Scientific Data* (2026), https://doi.org/10.1038/s41597-026-06758-7. Includes genuine neurotypical controls. Check the dataset's license (CC BY-NC-ND applies to the article; verify the data's own license on its repository before reuse/redistribution).
+However, UCLA CNP did not show greater ADHD dispersion on the measured Stop-Signal variables. Therefore, the current results do not prove that ADHD occupies a broader dimensional spectrum than controls. Testing that proposal requires preregistered dimensional models across comparable tasks and, ideally, repeated measurement within the same individuals.
 
-Neither dataset's raw data is redistributed in this repository; only derived, aggregated statistics and analysis code are included. Please cite the original dataset papers if you reuse this code on their data.
+## Untested — Not Measured and Not Claimed as Fact
 
-## Limitations (full list)
+- **Dopaminergic or ATP-depletion mechanism.** D1/D2 receptor and ATP language remains a motivating metaphor. No receptor imaging, pharmacological manipulation, ATP measurement, or direct mechanistic validation was performed.
+- **PRV-based physiological signature.** Pulse-rate variability was missing across all participants and activity sources in the available BALLADEER export. This is a data-availability gap, not evidence for or against the proposed mechanism.
+- **Long-timescale cyclical dynamics.** The informal hypothesis proposes within-person movement between Sprint-like and Crash-like states over weeks or months. The personal durations that motivated this idea are single-case, self-reported observations—not dataset-derived estimates. All three datasets used here are cross-sectional or single-session for the present purposes. A valid test would require longitudinal repeated measurement, such as ecological momentary assessment or daily behavioral sampling over several months.
 
-- Small subgroup sizes in several comparisons (n as low as 4–20).
-- Forced classification into 3 predefined clusters rather than unsupervised discovery of natural groupings.
-- Partial circularity between cluster-defining variables and outcome variables (see above).
-- No independent (third) dataset replication yet.
-- No physiological/mechanistic validation of any kind.
-- Analysis pipeline went through multiple iterations; while each individual test reported here applies proper correction, the broader iterative process carries some risk of researcher degrees of freedom that a pre-registered replication would eliminate.
-- The cyclical/phase-transition version of the hypothesis (as opposed to the static subtype version tested here) has not been tested and would require longitudinal data this project does not have.
+## Methodology
 
-## Reproducing the Analysis
+### HYPERAKTIV and BALLADEER legacy analyses
 
+1. Participants were represented by task speed, speed variability, and accuracy.
+2. They were assigned to the nearest z-scaled hypothesis anchor.
+3. ADHD-control differences within clusters were evaluated with two-sided Mann–Whitney U tests, Bonferroni correction across clusters, effect sizes, and label-permutation checks.
+
+**Known caveat:** accuracy/commission rate contributed to cluster definition and commission errors were subsequently compared across diagnostic groups within those clusters. The result is therefore partly circular: the outcome is related to a feature that helped construct the groups. The BALLADEER finding is retained, but interpreted as task-specific and methodologically qualified.
+
+### UCLA CNP cluster-free and ADHD-only analysis
+
+1. The primary analysis compared all eligible ADHD participants with all eligible healthy controls without assigning subtypes.
+2. Participant metrics included median go RT, robust RT variability (MAD and IQR), omission rate, and integration-method SSRT when trial-level stop-signal delay was available.
+3. Group location was tested with two-sided Mann–Whitney U, rank-biserial effect size, bootstrap confidence intervals, and median-difference permutation tests.
+4. Group dispersion was tested with median-centered Brown–Forsythe tests.
+5. Secondary clustering was restricted to ADHD participants and used only median go RT and go RT MAD. Diagnosis, control data, SSRT, and stop accuracy did not define clusters.
+6. Gaussian mixture models with K = 1, 2, and 3 were compared. A two-cluster interpretation required all of the following: BIC improvement over K = 1 of at least 10; K = 2 best BIC among candidates; silhouette ≥ 0.25; each cluster ≥ 15% of the ADHD sample; and bootstrap median adjusted Rand index ≥ 0.60.
+7. If those gates failed, the validator did not force subtype labels. SSRT remained a held-out validation outcome.
+
+The UCLA analysis used 5,000 label permutations, 500 bootstrap repetitions, and a fixed random seed. Raw MRI data were never required.
+
+## Datasets and Attribution
+
+- **HYPERAKTIV** — Hicks et al. Open clinical CPT-II dataset used for initial exploration. Its control group is a *clinical control* group with other psychiatric diagnoses, not a confirmed-healthy sample. Check current license terms before reuse or redistribution.
+- **BALLADEER** — Trujillo, Ferrer-Cascales, Teruel et al., *Scientific Data* (2026), [doi:10.1038/s41597-026-06758-7](https://doi.org/10.1038/s41597-026-06758-7). Includes diagnostically characterized ADHD, suspected ADHD, and neurotypical participants. Verify the data repository's current license independently from the article license before reuse or redistribution.
+- **UCLA CNP / OpenNeuro ds000030** — Bilder, Poldrack, Cannon, London, Freimer, Congdon, Karlsgodt, Sabb, and colleagues, "A phenome-wide examination of neural and cognitive function," *Scientific Data* (2016), [doi:10.1038/sdata.2016.110](https://doi.org/10.1038/sdata.2016.110); [OpenNeuro ds000030](https://openneuro.org/datasets/ds000030). The present analysis downloaded only public tabular phenotype and Stop-Signal event files. The dataset is distributed under PDDL on OpenNeuro.
+
+Raw participant data from these datasets are not redistributed in this repository. Only analysis code, aggregated results, diagnostics, and derived figures are included. Cite the original dataset publications and accessions when reusing the code or results.
+
+## Limitations
+
+- The project is exploratory, independently produced, and not peer reviewed or preregistered.
+- BALLADEER and HYPERAKTIV contain small within-cluster comparisons and legacy forced-anchor classification.
+- The BALLADEER commission-error result is partially circular because accuracy contributed to cluster definition.
+- HYPERAKTIV uses clinical controls rather than confirmed-healthy controls.
+- UCLA CNP is a conceptual rather than exact replication: an adult adaptive Stop-Signal Task is not equivalent to CPT-II or BALLADEER's attention task.
+- UCLA CNP yielded a substantive null result, but absence of evidence in one task does not establish equivalence across every ADHD-relevant process.
+- The UCLA validator did not use MRI and does not test neural mechanisms.
+- Age, sex, medication, symptom severity, and comorbidity require dedicated sensitivity analyses before strong causal or clinical interpretation.
+- Multiple analytic iterations create researcher degrees of freedom beyond the correction used within any single reported test.
+- Cross-sectional and single-session data cannot test weeks-to-months cyclical state transitions.
+- No direct physiological or molecular validation exists.
+
+## Reproducing the Analyses
+
+### Install dependencies
+
+```bash
+pip install pandas numpy scipy matplotlib seaborn scikit-learn boto3
 ```
-pip install pandas numpy scipy matplotlib --break-system-packages
-python HEALTHY_VALID_BALLADEER.py
+
+### Run the validators
+
+```bash
+python scripts/CLINICAL_VALID_HYPERAKTIV.py
+python scripts/HEALTHY_VALID_BALLADEER.py
+python scripts/UCLA_CNP_VALIDATOR.py
 ```
-Requires the BALLADEER dataset files placed in the expected directory structure (see script header).
+
+The HYPERAKTIV validator can retrieve its public source files when they are not present locally. BALLADEER requires the original dataset in the directory structure documented in the script header. The UCLA CNP validator downloads only public tabular metadata and Stop-Signal event files from OpenNeuro's anonymous S3 mirror, excludes MRI by design, generates a reproducibility report, and deletes downloaded raw tables after a successful run unless `--keep-data` is specified.
+
+### Google Colab
+
+Upload `scripts/UCLA_CNP_VALIDATOR.py` to the Colab session and run:
+
+```python
+!python /content/UCLA_CNP_VALIDATOR.py
+```
+
+The validator creates `UCLA_CNP_VALID_output.zip` and initiates a browser download in Colab.
+
+## Repository Outputs
+
+Recommended derived UCLA files for version control:
+
+```text
+ucla_cnp_academic_diagnostic.txt
+ucla_cnp_cluster_diagnostics.csv
+ucla_cnp_group_distributions.png
+ucla_cnp_temporal_dynamics.png
+ucla_cnp_analysis_config.json
+ucla_cnp_reproducibility_log.txt
+```
+
+Do not commit downloaded participant-level raw event files. Before publishing participant-level derived tables, verify that their redistribution is consistent with the dataset terms and your intended privacy standard.
+
+## Interpretation Boundaries
+
+This repository supports the following narrow conclusions:
+
+- BALLADEER contains a significant, task-specific commission-error difference in one analysis-defined cluster.
+- HYPERAKTIV contains a directionally consistent but corrected-nonsignificant trend.
+- UCLA CNP does not show corresponding ADHD-control differences or an acceptable discrete two-cluster structure on the examined Stop-Signal measures.
+- The three datasets do not establish permanent Sprint/Crash subtypes or a common biological mechanism.
+- A dimensional, state-sensitive reformulation is scientifically reasonable to test next, but remains exploratory.
+
+It does **not** support using these analyses for diagnosis, treatment selection, medication decisions, or claims about an individual's dopamine, ATP, receptor state, or metabolic condition.
 
 ## Acknowledgments
 
-Developed iteratively with the help of AI assistants (Claude, Gemini) for coding, statistical guidance, and methodological critique. All conceptual direction, decisions, and errors are the author's own; AI-generated interpretations were independently checked against the data and, where wrong, corrected in this document.
+Developed iteratively with assistance from AI systems for coding, statistical guidance, visualization, and methodological critique. All conceptual direction, analytic decisions, interpretations, and errors remain the author's responsibility. AI-generated outputs were reviewed against the available data and corrected when problems were identified.
 
 ## License
 
-Code in this repository: MIT License (feel free to change if you prefer something else).
-Data: not included; governed by the original datasets' own licenses (see above).
+Code in this repository: MIT License.
+
+Data are not included and remain governed by the original datasets' licenses and terms. The code license does not override those terms.
 
 ## Author
 
