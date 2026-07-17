@@ -1,0 +1,129 @@
+======================================================================
+HEALTHY_VALID (BALLADEER) -- ACADEMIC DIAGNOSTIC REPORT
+======================================================================
+
+0. DATASET NOTES
+----------------------------------------------------------------------
+  Source: BALLADEER open dataset (Nesplora-independent; EmbracePlus 
+  biometrics + Attention Robots game logs). DOI: 10.1038/s41597-026-06758-7
+  Access: IEEE DataPort DOI 10.21227/nevp-3a70 / Figshare DOI 10.6084/m9.figshare.28676042 (manual registration required; this script never downloads anything automatically).
+  Group assignment: users_demographics.json field 'group' (1 = Experimental (ADHD), 2 = Control).
+  Clean diagnostic cohorts (used for cohort-based stats/plots): Pure ADHD = group==1 OR (group==2 AND diagnosed=='yes'); Pure Control = group==2 AND diagnosed=='no'; Suspected ADHD = diagnosed=='undetermined'.
+
+1. FILES AND COLUMNS FOUND
+----------------------------------------------------------------------
+  Demographics file used: /storage/emulated/0/Download/users_demographics.json
+  Demographics file shape: 158 participant(s)
+  Group source: users_demographics.json field 'group' (1 = Experimental (ADHD), 2 = Control)
+  Clean cohort logic: Pure ADHD = group==1 OR (group==2 AND diagnosed=='yes'); Pure Control = group==2 AND diagnosed=='no'; Suspected ADHD = diagnosed=='undetermined'
+  Biometrics file used: /storage/emulated/0/Download/balladeer_embraceplus_data.csv
+  Biometrics file shape: 103 participant row(s)
+  Game-log files parsed: 150 session file(s) across 150 participant(s)
+  Game long-format rows: 600 rows (id x session_file x block)
+  Participants with complete data: 147 (Experimental (ADHD)=61, Control=86)
+  Clean cohort split (group+diagnosed): Pure ADHD=86, Pure Control=42, Suspected ADHD=19, unclassified=0
+
+2. MONTE-CARLO ANCHOR CALIBRATION (empirical parameters, real BALLADEER data)
+----------------------------------------------------------------------
+  The hypothesis anchors are re-simulated on every run from this dataset's 
+  own empirical parameters below (not a fixed, dataset-independent table), 
+  then clipped to the real participants' own numeric range.
+  CONFIRMATORY CLASSIFICATION FEATURES: work_speed_mean, work_speed_std.
+  Accuracy/Percent Commissions is excluded from subtype assignment and is used
+  only as an external outcome, preventing same-variable circular validation.
+
+  Work Speed Mean (velocidadTrabajo):
+    Experimental (ADHD): mean=18.557, sd=6.640 (n=61)
+    Control: mean=20.359, sd=7.663 (n=86)
+    Real-data bounds used to clip anchors: [5.750, 40.583]
+  Work Speed SD (velocidadTrabajo variability):
+    Experimental (ADHD): mean=2.472, sd=1.762 (n=61)
+    Control: mean=1.938, sd=1.230 (n=86)
+    Real-data bounds used to clip anchors: [0.333, 10.026]
+  Accuracy % (complement of comision / percent_commissions):
+    Experimental (ADHD): mean=55.349, sd=42.832 (n=61)
+    Control: mean=44.272, sd=45.106 (n=86)
+    Real-data bounds used to clip anchors: [-0.000, 100.000]
+
+3. CLUSTER DISTRIBUTION (nearest hypothesis anchor, forced classification)
+----------------------------------------------------------------------
+Cluster                                 Total Experi Contro   PureADHD   PureCtrl    Suspect
+True Resilience                            58     22     36         33         15         10
+Subtype 1: Decompensated Sprint            45     16     29         19         20          6
+Subtype 2: Compensated Crash               44     23     21         34          7          3
+
+4. ADHD SUBTYPE PROFILES (BALLADEER Attention Robots game metrics)
+----------------------------------------------------------------------
+  Subtype                                                        n      Pct.Comm.     Accuracy%%
+  Control                                                       86          18.10          44.27
+  Experimental (ADHD)                                           61          19.32          55.35
+    -> Subtype 1: "Decompensated Sprint"                        16          22.00          51.47
+    -> Subtype 2: "Compensated Crash / Metabolic Fatigue"       23          22.26          48.62
+
+5. BIOMETRIC CHANGE ANALYSIS: EMBRACEPLUS EDA (PRV skipped -- no usable data this run) (fixed)
+   (delta = mean(last two min) - mean(first two min))
+----------------------------------------------------------------------
+  Delta is averaged across all activity sources (S1/S6/S11/Cognifit/Robots)
+  for which wearing_detection was present and non-zero; rows where 
+  wearing_detection == 0 were excluded as motion artifacts before averaging.
+  Broken down by clean cohort (Pure Control / Pure ADHD / Suspected ADHD) x subtype.
+  NOTE: PRV is entirely NaN for every participant/source in this run's biometrics 
+  file, so the PRV column is omitted below and from the fatigue-dynamics plot -- 
+  only EDA is shown. This is a data-coverage gap in the source export, not a bug.
+
+Cohort / Subtype                                         n        EDA Change
+Pure Control / True Resilience                          15            0.1023
+Pure Control / Subtype 1: Decompensated Sprint          20            0.1475
+Pure Control / Subtype 2: Compensated Crash              7            0.1858
+Pure ADHD / True Resilience                             33            0.0593
+Pure ADHD / Subtype 1: Decompensated Sprint             19           -0.1019
+Pure ADHD / Subtype 2: Compensated Crash                34            0.1897
+Suspected ADHD / True Resilience                        10            0.4238
+Suspected ADHD / Subtype 1: Decompensated Sprint         6           -0.0694
+Suspected ADHD / Subtype 2: Compensated Crash            3            0.7456
+
+6. STATISTICAL VALIDATION: MANN-WHITNEY U (per cluster) + PERMUTATION TEST + MIXEDLM
+----------------------------------------------------------------------
+  Groups compared: Pure ADHD vs Pure Control | Metric: percent_commissions
+  Bonferroni-corrected alpha: 0.01667 (base alpha 0.05 / 3 clusters)
+
+  True Resilience: U=213.50, p=0.45574, effect size r=0.137, n_Pure ADHD=33, n_Pure Control=15 -> not significant
+  Subtype 1: Decompensated Sprint: U=262.50, p=0.03827, effect size r=-0.382, n_Pure ADHD=19, n_Pure Control=20 -> not significant
+  Subtype 2: Compensated Crash: U=121.50, p=0.94474, effect size r=-0.021, n_Pure ADHD=34, n_Pure Control=7 -> not significant
+
+  Permutation test (target cluster: Subtype 1: Decompensated Sprint, 1000 label-shuffles):
+    Real analytical p-value: 0.03827
+    Empirical permutation p-value: 0.04400
+
+  Linear Mixed-Effects Model (MixedLM), within-ADHD subtype dynamics:
+    Formula: percent_commissions ~ block * cluster | groups=participant id
+    Sample: strictly Pure ADHD only, split by assigned subtype (Sprint vs Crash); Pure Control and Suspected are fully excluded.
+    n participants: 35 (Sprint=11, Crash=24)
+    Interaction effect (block x cluster, Sprint vs Crash):
+      Coefficient: 0.76378
+      Std.Err.:    1.30573
+      z-value:     0.58494
+      p-value:     0.55859
+      НЕ ПОДТВЕРЖДЕНО: Динамика изменения ошибок по блокам между подтипами внутри ADHD не имеет значимых различий.
+
+7. CONFOUNDER CHECK
+----------------------------------------------------------------------
+  Age:
+    Experimental (ADHD): mean=11.90, sd=3.03 (n=61)
+    Control: mean=12.31, sd=4.01 (n=86)
+  Sex/Gender:
+    Experimental (ADHD): f=14, m=47 (n=61)
+    Control: f=43, m=43 (n=86)
+  Clinical ADHD Diagnosis (self/clinician-reported):
+    Experimental (ADHD): yes=61 (n=61)
+    Control: no=42, undetermined=19, yes=25 (n=86)
+
+----------------------------------------------------------------------
+NOTE: The hypothesis anchor points (see section 2) are re-simulated on every 
+run from this dataset's own empirical parameters, not reused from a fixed 
+prior simulation. The z-score scaler is fit strictly on the real participant 
+vectors (never jointly with the anchors), then reused to transform both the 
+real vectors and the anchors before nearest-centroid classification. 
+Interpret cluster membership as a relative, hypothesis-driven grouping, not 
+an absolute clinical classification.
+======================================================================
