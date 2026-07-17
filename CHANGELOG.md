@@ -2,7 +2,7 @@
 
 All notable repository changes are documented here.
 
-## [Unreleased] — v1.1.0 candidate
+## [released] — v1.1.0 
 
 ### Added
 
@@ -11,6 +11,8 @@ All notable repository changes are documented here.
 - Corrected no-response/omission scoring for missing `Perform` values.
 - Four-level categorical distractor summaries and order-invariant range endpoints.
 - ADHD Pupil figures and aggregated diagnostic artifacts.
+- `LICENSE-CONTENT.txt` with CC BY 4.0 terms for original non-code project material.
+- `THIRD_PARTY_NOTICES.md` with dataset attribution, source, and licensing notes.
 - `mat73-reader==0.1.0`, `h5py`, `mat73`, and `requests` dependencies.
 
 ### Changed
@@ -19,6 +21,9 @@ All notable repository changes are documented here.
 - The main interpretation shifts from an unsupported categorical subtype model toward task-dependent dimensional behavioral instability.
 - Next-release planning changes from patch-only `v1.0.1` to minor-release candidate `v1.1.0`.
 - Citation metadata and dependency ranges updated.
+- Repository licensing clarified: original code remains under MIT, while original documentation, figures, tables, and aggregated research outputs are under CC BY 4.0.
+- README license badges, dataset-notice link, and validator commands updated.
+- Historical BALLADEER reproduction instructions now point to the archived v1.0.0 validator; the uncompleted cluster-free candidate is not presented as a supported current run.
 
 ### Results
 
