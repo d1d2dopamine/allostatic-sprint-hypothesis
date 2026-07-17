@@ -526,3 +526,231 @@ At this stage the repository documents an evolving exploratory hypothesis, not a
 > BALLADEER produced one task-specific, methodologically qualified positive result; HYPERAKTIV produced a corrected-nonsignificant trend; UCLA CNP produced a substantive cluster-free null result. Together they do not support permanent, task-general Sprint/Crash subtypes. A dimensional and state-sensitive reformulation is reasonable to test, but remains unconfirmed. No molecular mechanism, diagnostic application, or treatment implication has been established.
 
 Negative and inconclusive results are retained because they define the limits of the hypothesis and reduce the risk of presenting an exploratory narrative as settled evidence.
+
+
+## ADHD Pupil Dataset — fourth independent conceptual test
+
+### Selection rationale
+
+After the UCLA CNP cluster-free null, the Figshare ADHD Pupil Dataset (`7218725`, version 3) was selected to test a different but related construct: behavioral stability during visuospatial working memory rather than adaptive stopping. It provides trial-level reaction time and accuracy, ADHD and control groups, and paired off/on-methylphenidate sessions for a subset. This is an independent conceptual test of the broad behavioral-instability premise, not an exact Go/No-Go replication.
+
+Dataset source and attribution:
+
+- Figshare DOI: `10.6084/m9.figshare.7218725`.
+- Data descriptor: `10.1038/s41597-019-0037-2`.
+- License: CC BY 4.0.
+- Official file: `Pupil_dataset.mat`, 1,257,809,856 bytes.
+- Official MD5: `d4a1e92c8e125e93831f12797a783d52`.
+- Verified SHA-256: `44aa997e37815e7d2a003a4fc4e967f69438a86bdf04650b02f37aaa2a81819b`.
+
+### Validator-development chronology
+
+The first validator versions were written from the public description before the actual MATLAB object layout had been inspected. Several failures were corrected and are retained here rather than hidden:
+
+1. A partial download was initially accepted as complete; SciPy reported a truncated MAT file. Official size and MD5 verification were added.
+2. The source was MATLAB 7.3 with an HDF5 user block, not an ordinary pre-7.3 MAT file.
+3. Actual names differed from the prose description: `Pupil_data`, `Task_epocs`, and `Wisc`.
+4. `Task_epocs` consisted of MATLAB MCOS table objects represented by `(1, 6) uint32` headers with `MATLAB_object_decode = 3`.
+5. SciPy cannot open MATLAB 7.3, standard `mat73` cannot reconstruct MCOS tables, and ordinary `h5py` exposes only headers and references.
+6. A targeted HDF5 inspector confirmed 67 references for `Subject`, `Age`, `Group`, `Task_epocs`, and `Wisc`.
+7. `mat73-reader==0.1.0`, specifically designed for MATLAB 7.3 MCOS tables, successfully decoded the trial tables into pandas DataFrames.
+
+The real file produced the expected structure:
+
+- 50 unique participants;
+- 67 sessions;
+- 28 off-medication ADHD sessions;
+- 22 control sessions;
+- 17 paired on-medication ADHD sessions;
+- 160 trials per session;
+- 10,720 total trials;
+- columns `Trial`, `Load`, `Distractor`, `CorrResponse`, `Perform`, `Rtime`, and `Pupil`.
+
+### Initial successful run and scoring correction
+
+Validator `0.1.5-candidate` completed the first successful real-data run. Review showed 796 missing `Perform` values. The initial successful run excluded them from the accuracy denominator. Missingness was uneven:
+
+- ADHD off: 478 / 4,480 trials = 10.67%;
+- ADHD on: 127 / 2,720 trials = 4.67%;
+- controls: 191 / 3,520 trials = 5.43%.
+
+Because `Perform` is documented as 1 for correct and 0 for incorrect, missing values were conservatively reclassified as no-response/omission errors. A second issue was corrected: `Distractor` had four levels (`3`, `4`, `5`, `6`), while the first script assumed a two-level contrast.
+
+### Corrected validator `0.2.0-candidate`
+
+The corrected analysis implemented:
+
+- missing `Perform` scored as no-response error;
+- accuracy calculated over all trials;
+- `error_rate = 1 - accuracy` retained descriptively but not tested as a duplicate primary endpoint;
+- omission rate tested separately;
+- four-level `Distractor` treated categorically;
+- order-invariant max-minus-min ranges used as secondary modulation endpoints;
+- condition-level output for load and distractor levels;
+- cluster-free primary analysis;
+- ADHD-only RT-derived GMM with BIC, silhouette, minimum-size, and bootstrap-ARI gates;
+- pupil vectors excluded from the reported primary behavioral analysis;
+- stale failure traces removed before successful packaging.
+
+Inferential settings:
+
+- 5,000 permutations;
+- 2,000 bootstrap repetitions;
+- seed `20260717`;
+- RT window 100–5,000 ms;
+- minimum 20 valid correct-RT trials;
+- Mann–Whitney, rank-biserial, bootstrap median-difference intervals, Brown–Forsythe, and Holm correction;
+- paired Wilcoxon and sign-permutation analyses for medication sessions.
+
+### Corrected cluster-free results
+
+Primary comparison: 28 off-medication ADHD participants versus 22 controls.
+
+Median correct RT did not differ:
+
+- difference: −19.5 ms;
+- permutation p = 0.4479;
+- Holm p = 0.4479;
+- Brown–Forsythe p = 0.1371.
+
+Robust RT variability was greater in ADHD:
+
+- RT MAD difference: +61.75 ms; permutation p = 0.0022; Holm p = 0.0088; Brown–Forsythe p < 0.00001.
+- RT IQR difference: +99.625 ms; permutation p = 0.0024; Holm p = 0.0088; Brown–Forsythe p = 0.000052.
+
+Accuracy was lower when no-response trials were scored as errors:
+
+- difference: −0.275;
+- permutation p = 0.0002;
+- Holm p = 0.0010;
+- Brown–Forsythe p = 0.0676.
+
+Median omission rate was not significant after correction:
+
+- difference: +0.0375;
+- permutation p = 0.1054;
+- Holm p = 0.2108.
+
+Omission-rate dispersion differed (Brown–Forsythe p = 0.0119), but a dispersion result is not a median group difference and does not establish a subtype.
+
+### Secondary condition and temporal results
+
+No temporal or load endpoint survived correction:
+
+- RT slope: Holm p = 1.0;
+- error slope: Holm p = 0.6479;
+- load RT contrast: Holm p = 1.0;
+- load accuracy contrast: Holm p = 1.0.
+
+Four-level distractor modulation was larger descriptively in ADHD but did not survive Holm correction:
+
+- distractor RT-range difference: +48.25 ms; nominal p = 0.0392; Holm p = 0.2352;
+- distractor accuracy-range difference: +0.50; nominal p = 0.0190; Holm p = 0.1330;
+- distractor omission range: Holm p = 1.0.
+
+These are exploratory signals. Range statistics quantify modulation magnitude and do not identify a directional ordered effect.
+
+### Paired medication results
+
+Seventeen ADHD participants had both off- and on-methylphenidate sessions. No endpoint survived Holm correction:
+
+- median RT: +58 ms; paired permutation p = 0.0710; Holm p = 0.5679;
+- RT MAD: −17 ms; paired permutation p = 0.0720; Holm p = 0.5679;
+- RT IQR: −20.5 ms; paired permutation p = 0.2613; Holm p = 1.0;
+- accuracy: +0.0125; paired permutation p = 0.6161; Holm p = 1.0;
+- omission rate: −0.0187; paired permutation p = 0.4189; Holm p = 1.0;
+- distractor RT range: −45 ms; paired permutation p = 0.2589; Holm p = 1.0.
+
+The descriptive reduction in RT MAD is insufficient evidence of a medication effect.
+
+### Exploratory clustering
+
+The ADHD-only GMM failed one or more required gates:
+
+```text
+stable_two_cluster = False
+```
+
+Figure colors remain exploratory numeric assignments, not Sprint/Crash labels.
+
+### Interpretation after the fourth dataset
+
+ADHD Pupil provides independent support for the broad behavioral premise that ADHD-related impairment can involve unstable performance rather than uniform slowing. Similar median RT combined with greater robust RT variability and lower accuracy is consistent with impaired stability of cognitive performance.
+
+This strengthens the general behavioral premise and dimensional reformulation, but does not prove the full hypothesis:
+
+- UCLA remains a substantive null in an adult Stop-Signal task.
+- Increased variability is task- and context-dependent, not universal.
+- Stable discrete components again failed.
+- Pupil dynamics were not analyzed in the reported run.
+- Medication endpoints were corrected-nonsignificant.
+- No receptor, neurotransmitter, ATP, metabolic, neural, or causal allostatic variable was measured.
+
+The strongest responsible synthesis is:
+
+> Across four independent datasets, evidence is heterogeneous but no longer reducible to one isolated positive result. The ADHD Pupil working-memory task independently shows greater behavioral instability and lower accuracy without uniform slowing. This strengthens a task-dependent dimensional behavioral-instability formulation, while permanent discrete subtypes and the proposed biological mechanism remain unsupported or untested.
+
+## Repository update after ADHD Pupil
+
+The candidate update adds:
+
+```text
+scripts/ADHD_PUPIL_VALIDATOR.py
+images/adhd_pupil_group_distributions.png
+images/adhd_pupil_medication_pairs.png
+images/adhd_pupil_dimensional_spectrum.png
+docs/results/adhd_pupil/adhd_pupil_academic_diagnostic.txt
+docs/results/adhd_pupil/adhd_pupil_analysis_config.json
+docs/results/adhd_pupil/adhd_pupil_reproducibility_log.txt
+docs/results/adhd_pupil/RESULTS.md
+```
+
+The 1.258 GB source MAT file and participant-level raw exports are not included.
+
+## Superseding evidence status — 17 July 2026
+
+### Independently supported at the behavioral level
+
+- ADHD Pupil: greater RT MAD and IQR after Holm correction, lower all-trial accuracy, and no significant median-RT difference.
+
+### Historical positive with methodological qualification
+
+- BALLADEER v1.0.0: p = 0.011 and permutation p = 0.014 within an anchor-defined cluster; partial circularity prevents clean subtype validation.
+
+### Corrected-nonsignificant
+
+- HYPERAKTIV analogous cluster result.
+- ADHD Pupil paired medication effects.
+- ADHD Pupil temporal, load, and distractor-range endpoints after Holm correction.
+
+### Substantive null conceptual replication
+
+- UCLA CNP cluster-free Stop-Signal outcomes and dispersion tests.
+
+### Not supported
+
+- Stable task-general Sprint/Crash subtypes.
+- BALLADEER Sprint-versus-Crash trajectory interaction.
+- A clear physiological signature separating proposed categories.
+
+### Untested
+
+- Pupil-linked arousal in the reported ADHD Pupil run.
+- Dopamine D1/D2 receptor states.
+- ATP depletion or metabolic exhaustion.
+- Causal allostatic dynamics.
+- Diagnostic, prognostic, or treatment utility.
+
+## Updated versioning decision
+
+The public release remains `v1.0.0`. Because this bundle adds a fourth dataset, a substantial validator, corrected scoring, three figures, and a revised synthesis, the appropriate next release is a minor release candidate (`v1.1.0`), not a patch-only `v1.0.1`.
+
+No tag should be created until:
+
+1. The candidate bundle is placed into the repository and paths are verified.
+2. README images render correctly on GitHub.
+3. Validator and artifact hashes are recorded.
+4. The final commit is archived and citation metadata are updated.
+5. The pending BALLADEER cluster-free rerun remains clearly labeled pending.
+
+The existing `v1.0.0` tag must not be moved.
