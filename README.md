@@ -4,7 +4,8 @@
   <a href="https://doi.org/10.5281/zenodo.21304761"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.21304761.svg" alt="DOI"></a>
   <img src="https://img.shields.io/badge/status-exploratory-orange" alt="status">
   <img src="https://img.shields.io/badge/peer--reviewed-no-red" alt="not peer reviewed">
-  <img src="https://img.shields.io/badge/license-MIT-blue" alt="license">
+  <img src="https://img.shields.io/badge/code-MIT-blue" alt="Code: MIT">
+  <img src="https://img.shields.io/badge/content-CC%20BY%204.0-green" alt="Content: CC BY 4.0">
   <img src="https://img.shields.io/badge/python-3.10--3.13-blue" alt="python">
 </p>
 
@@ -213,7 +214,7 @@ The UCLA null remains important. It shows that increased variability is not univ
 - **UCLA CNP / OpenNeuro `ds000030`** — Bilder, Poldrack, Cannon, London, Freimer, Congdon, Karlsgodt, Sabb, and colleagues, *Scientific Data* (2016), [doi:10.1038/sdata.2016.110](https://doi.org/10.1038/sdata.2016.110); [OpenNeuro ds000030](https://openneuro.org/datasets/ds000030). Distributed under PDDL on OpenNeuro.
 - **ADHD Pupil Dataset / Figshare `7218725`** — Rojas-Líbano, Wainstein, and Ossandón, “A pupil size, eye-tracking and neuropsychological dataset from ADHD children during a cognitive task,” *Scientific Data* (2019), [doi:10.1038/s41597-019-0037-2](https://doi.org/10.1038/s41597-019-0037-2); [Figshare dataset](https://doi.org/10.6084/m9.figshare.7218725). Dataset license: CC BY 4.0.
 
-Raw participant data are not redistributed here. The repository includes analysis code, aggregated diagnostics, and figures. Cite each original dataset when reusing code or results.
+Raw participant data are not redistributed here. The repository includes analysis code, aggregated diagnostics, and figures. Cite each original dataset when reusing code or results. See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for source, attribution, and licensing notes.
 
 ## Limitations
 
@@ -238,14 +239,18 @@ Raw participant data are not redistributed here. The repository includes analysi
 python -m pip install -r requirements.txt
 ```
 
-### Run validators
+### Run current validators
 
 ```bash
 python scripts/CLINICAL_VALID_HYPERAKTIV.py
-python scripts/HEALTHY_VALID_BALLADEER.py
 python scripts/UCLA_CNP_VALIDATOR.py
 python scripts/ADHD_PUPIL_VALIDATOR.py
 ```
+
+The completed historical BALLADEER v1.0.0 validator is preserved at
+`docs/legacy/v1.0.0/HEALTHY_VALID_BALLADEER.py`. The newer cluster-free
+BALLADEER candidate has not completed a real-data rerun and is therefore not
+listed as a supported current validator.
 
 The ADHD Pupil validator downloads the official 1.258 GB Figshare MATLAB file, verifies size and MD5, decodes MCOS tables, creates diagnostics and figures, and removes raw data after success unless `--keep-data` is supplied.
 
@@ -299,7 +304,8 @@ Developed iteratively with AI assistance for coding, statistical guidance, visua
 Original software code is licensed under the MIT License; see `LICENSE`.
 
 Original documentation, figures, tables, and aggregated research outputs are
-licensed under CC BY 4.0; see `LICENSE-CONTENT.txt`.
+licensed under Creative Commons Attribution 4.0 International (CC BY 4.0); see
+`LICENSE-CONTENT.txt`.
 
 Third-party datasets and materials remain governed by their original licenses
 and terms.
