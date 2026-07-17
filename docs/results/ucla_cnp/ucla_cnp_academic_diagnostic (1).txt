@@ -1,0 +1,68 @@
+UCLA CNP ds000030 Behavioral Validator — Final Report
+Script version: 0.1.0
+Generated: 2026-07-16T18:17:00.111718+00:00
+Exploratory research only — not a diagnostic or clinical tool.
+
+1. DATA AND SAMPLE
+  Dataset: UCLA Consortium for Neuropsychiatric Phenomics LA5c / OpenNeuro ds000030
+  Only tabular metadata and Stop-Signal event files were requested; MRI was excluded.
+  participants.tsv rows: 272
+  ADHD              : metadata n=43; eligible behavioral n=41
+  Healthy Control   : metadata n=130; eligible behavioral n=126
+  Other/Unknown     : metadata n=99; eligible behavioral n=0
+
+2. EVENT-SCHEMA AUDIT
+  unique accepted schemas: 1
+  most common schema mappings: {'{"trial": "trial_type", "rt": "ReactionTime", "ssd": "StopSignalDelay", "correct": "SubjectResponseCorrectness", "response": "SubjectResponseButton", "onset": "onset"}': 167}
+  most common event column sets: {'onset | duration | trial_type | PresentedStimulusArrowDirection | ReactionTime | SubjectResponseButton | SubjectResponseButtonCode | SubjectResponseCorrectness | TrialOutcome | StopSignalDelay | LadderNumber | LadderTime | LadderMovement | TimeCourse | onset_noTriggerAdjust | TimeCourse_noTriggerAdjust': 167}
+  scanner event files: 266
+  training event files (not used in primary metrics): 267
+  RT inclusion window: 0.10–3.00 seconds
+  Minimum valid trials: go=40, stop=12
+
+3. PRIMARY CLUSTER-FREE ANALYSIS: ADHD VS HEALTHY CONTROL
+  No cluster assignment is used in this section.
+  Mann–Whitney tests are two-sided; permutation tests compare median differences.
+  median_go_rt_s: n_ADHD=41, n_control=126, medians=0.4768 vs 0.4481, U=2873.00, p=0.2817, rank-biserial r=-0.112, permutation p=0.1500, median difference 95% bootstrap CI=[-0.0120, 0.0795]
+  go_rt_mad_s: n_ADHD=41, n_control=126, medians=0.0602 vs 0.0612, U=2677.00, p=0.7281, rank-biserial r=-0.036, permutation p=0.9058, median difference 95% bootstrap CI=[-0.0109, 0.0132]
+  go_rt_iqr_s: n_ADHD=41, n_control=126, medians=0.1237 vs 0.1219, U=2651.00, p=0.8018, rank-biserial r=-0.026, permutation p=0.8562, median difference 95% bootstrap CI=[-0.0225, 0.0312]
+  go_omission_rate: n_ADHD=41, n_control=126, medians=0.0000 vs 0.0000, U=2801.50, p=0.3252, rank-biserial r=-0.085, permutation p=1.0000, median difference 95% bootstrap CI=[0.0000, 0.0104]
+  ssrt_s: n_ADHD=41, n_control=126, medians=0.2061 vs 0.2172, U=2482.00, p=0.7086, rank-biserial r=0.039, permutation p=0.4947, median difference 95% bootstrap CI=[-0.0376, 0.0249]
+
+4. DISTRIBUTIONAL HETEROGENEITY (BROWN–FORSYTHE, MEDIAN-CENTERED)
+  median_go_rt_s: statistic=0.089, p=0.7661
+  go_rt_mad_s: statistic=0.715, p=0.3992
+  go_rt_iqr_s: statistic=0.500, p=0.4803
+  ssrt_s: statistic=1.628, p=0.2037
+
+5. SECONDARY ADHD-ONLY CLUSTERING
+  Features: median go RT and go RT MAD only.
+  Controls, diagnosis labels, SSRT, stop accuracy, and clinical outcomes did not define clusters.
+  Candidate GMMs: K=1, K=2, K=3; robust scaling fitted only on ADHD.
+  Stable two-cluster result: False
+  Decision: failed gates: minimum_share
+  Gates: BIC improvement=17.57 (required >= 10.0); K=2 BIC=183.90, K=3 BIC=199.13 (K=2 must be best); silhouette=0.726 (>= 0.25); minimum share=0.024 (>= 0.15); bootstrap median ARI=0.638 (>= 0.60)
+  Interpretation: no stable evidence for discrete ADHD behavioral subtypes was accepted.
+  The script deliberately did not force participants into Sprint/Crash labels.
+
+6. TEMPORAL SCOPE
+  Four sequential blocks describe within-session changes over minutes only.
+  They cannot test hypothesized phase transitions over weeks or months.
+
+7. LIMITATIONS
+  - Stop-Signal is not the same task as BALLADEER or CPT-II; this is a conceptual replication.
+  - Adaptive stop-signal procedures target ~50%% stopping success; stop-success rate is not a primary outcome.
+  - SSRT is reported only when trial-level SSD and sufficient data permit integration-method estimation.
+  - GMM clusters are exploratory unless independently preregistered and replicated.
+  - Behavioral patterns do not validate dopamine, ATP, receptor, metabolic, or neural mechanisms.
+  - Cross-sectional data cannot establish cyclical within-person states.
+
+8. REPRODUCIBILITY
+  Random seed: 20260716
+  Permutations: 5000; bootstraps: 500
+  Raw data kept after run: False
+  See ucla_cnp_analysis_config.json, ucla_cnp_quality_control.csv, and ucla_cnp_cluster_diagnostics.csv for machine-readable details.
+
+CITATION
+  Cite the UCLA CNP/OpenNeuro ds000030 data descriptor and dataset accession.
+  This script does not redistribute raw participant data.
