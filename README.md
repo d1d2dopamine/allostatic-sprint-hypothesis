@@ -144,7 +144,7 @@ These legacy analyses used forced hypothesis anchors, and accuracy/commission-re
 </tr>
 </table>
 
-A cluster-free BALLADEER v1.0.1 candidate has been written but has not yet completed a real-data rerun. No new BALLADEER numerical result should be claimed until that rerun occurs.
+A cluster-free BALLADEER v1.0.1 candidate is preserved at [`scripts/HEALTHY_VALID_BALLADEER.py`](scripts/HEALTHY_VALID_BALLADEER.py), with its status, required schema audit, run plan, and unresolved corrections documented in [`docs/BALLADEER_VALIDATOR_HANDOFF.md`](docs/BALLADEER_VALIDATOR_HANDOFF.md). It has not completed a real-data rerun. No new BALLADEER numerical result should be claimed until that rerun and its quality-control review are complete.
 
 ### UCLA CNP
 
@@ -231,6 +231,20 @@ Raw participant data are not redistributed here. The repository includes analysi
 - Cross-sectional and single-session data cannot establish weeks-to-months state cycles.
 - No direct receptor, neurotransmitter, metabolic, neural, or causal measurement exists.
 
+## Universal Validator Core
+
+The repository includes [`scripts/validator_core.py`](scripts/validator_core.py), a reusable foundation extracted from the shared architecture of the HYPERAKTIV, historical BALLADEER, UCLA CNP, and ADHD Pupil validators. It provides reproducibility configuration, integrity-checked downloads, safe archive handling, robust participant/session metrics, independent and paired tests, multiplicity correction, gated exploratory GMMs, plots, reports, packaging, and SHA-256 manifest generation.
+
+The core deliberately contains no dataset-specific diagnostic labels, clinical cutoffs, source-column mappings, or biological interpretation. New datasets must be implemented as adapters with explicit acquisition, normalization, quality-control, metric, analysis, and rendering stages.
+
+Usage and modification instructions are in [`docs/VALIDATOR_CORE_GUIDE.md`](docs/VALIDATOR_CORE_GUIDE.md). After installing the repository requirements, run the deterministic synthetic smoke test with:
+
+```bash
+python scripts/validator_core.py --self-test --json
+```
+
+The existing validators remain standalone release artifacts and have not been silently rewritten to depend on the new core. Future adapters can import the core while historical scripts remain reproducible in their archived form.
+
 ## Reproducing the Analyses
 
 ### Install dependencies
@@ -249,8 +263,11 @@ python scripts/ADHD_PUPIL_VALIDATOR.py
 
 The completed historical BALLADEER v1.0.0 validator is preserved at
 `docs/legacy/v1.0.0/HEALTHY_VALID_BALLADEER.py`. The newer cluster-free
-BALLADEER candidate has not completed a real-data rerun and is therefore not
-listed as a supported current validator.
+candidate is distributed at `scripts/HEALTHY_VALID_BALLADEER.py`, but it has
+not completed a real-data rerun and is therefore not listed above as a
+supported completed validator. Before attempting it, read
+`docs/BALLADEER_VALIDATOR_HANDOFF.md`; running the candidate does not by itself
+promote its outputs to validated results.
 
 The ADHD Pupil validator downloads the official 1.258 GB Figshare MATLAB file, verifies size and MD5, decodes MCOS tables, creates diagnostics and figures, and removes raw data after success unless `--keep-data` is supplied.
 
@@ -293,7 +310,7 @@ The repository now supports these narrow conclusions:
 
 ## Version Status
 
-The public release remains `v1.0.0`. This repository bundle is a **candidate for v1.1.0** because it adds a new independent dataset, validator, corrected scoring rules, figures, and evidence synthesis. Do not create or move a release tag until the final file set and hashes are reviewed. The pending cluster-free BALLADEER rerun remains separate and must not be described as completed.
+The public release history must remain immutable. This repository bundle is prepared for `v1.1.1`, adding the reusable validator core and its guide on top of the four-dataset evidence synthesis. Do not create or move the release tag until the final file set, core smoke test, and hashes are reviewed. The pending cluster-free BALLADEER rerun remains separate and must not be described as completed.
 
 ## Acknowledgments
 
