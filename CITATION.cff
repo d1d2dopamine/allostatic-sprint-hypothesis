@@ -1,28 +1,26 @@
 cff-version: 1.2.0
-message: "If you use this repository or its findings, please cite it as below."
-title: "Allostatic Sprint Hypothesis: Exploring Impulsivity Heterogeneity in ADHD"
+message: "If you use this repository, its validators, or its findings, please cite the archived release and the original datasets."
+title: "Allostatic Sprint Hypothesis: Exploring Behavioral Instability in ADHD"
 authors:
   - name: "D1D2DOPAMINE"
-    # add an ORCID here later if you ever create one anonymously (orcid.org allows pseudonymous profiles is NOT true --
-    # ORCID requires a real identity, so skip this unless you're ready to attach your name)
-date-released: 2026-07-11
-version: "1.0.0"
-doi: 10.5281/zenodo.21304761
-identifiers:
-  - type: doi
-    value: 10.5281/zenodo.21304761
-url: "https://github.com/d1d2dopamine/the-Allosteric-Sprint-hypothesis"
-repository-code: "https://github.com/d1d2dopamine/the-Allosteric-Sprint-hypothesis"
+date-released: 2026-07-17
+url: "https://doi.org/10.5281/zenodo.21304761"
 license: MIT
 keywords:
   - ADHD
-  - impulsivity
-  - continuous performance test
+  - reaction time variability
+  - behavioral instability
+  - continuous performance task
+  - stop-signal task
+  - working memory
   - computational psychiatry
   - open data
 abstract: >
-  An independent, exploratory re-analysis of two open ADHD datasets (HYPERAKTIV, BALLADEER)
-  testing a hypothesized behavioral subtype structure. Finds replicated evidence for
-  impulsivity heterogeneity in ADHD relative to neurotypical controls; does not find
-  support for a hypothesized temporal (within-task) divergence between subtypes.
-  Not peer-reviewed.
+  An exploratory, non-peer-reviewed re-analysis of four public ADHD-related
+  behavioral datasets: HYPERAKTIV, BALLADEER, UCLA CNP/OpenNeuro ds000030,
+  and the ADHD Pupil Dataset. The accumulated results do not support stable,
+  task-general Sprint/Crash subtypes. The ADHD Pupil analysis independently
+  finds greater reaction-time variability and lower accuracy without uniform
+  median-RT slowing, strengthening a task-dependent dimensional behavioral-
+  instability formulation. The proposed allostatic, dopaminergic, metabolic,
+  pupillary, diagnostic, and treatment mechanisms remain untested.
